@@ -1,7 +1,8 @@
-import axios from "axios";
+import api from "./api";
 
-export const getFirstAidGuidance = (text) => {
-  return axios.post("http://127.0.0.1:8000/api/first-aid", {
-    problem: text,
+export const getFirstAidGuidance = async (text) => {
+  const response = await api.post("/api/first-aid", {
+    text: text,
   });
+  return response.data;
 };

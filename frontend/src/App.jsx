@@ -1,30 +1,25 @@
-import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/footer";
-
 import Home from "./pages/Home";
-import SymptomChecker from "./pages/SymptomChecker";
-import FirstAid from "./pages/firstaid";
+import Symptoms from "./pages/SymptomChecker";
+import FirstAid from "./pages/FirstAid";
 import Hospitals from "./pages/Hospitals";
 
-export default function App() {
+function App() {
   return (
     <>
       <Navbar />
-
-      {/* MAIN CONTENT */}
-      <div className="app-content">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/symptoms" element={<SymptomChecker />} />
-          <Route path="/first-aid" element={<FirstAid />} />
-          <Route path="/hospital" element={<Hospitals />} />
-        </Routes>
-      </div>
-      
-      {/* FOOTER ALWAYS AT BOTTOM */}
+      <Routes>
+        <Route path="/" element={<Home />} />   {/* THIS LINE IS CRITICAL */}
+        <Route path="/home" element={<Home />} />
+        <Route path="/symptoms" element={<Symptoms />} />
+        <Route path="/first-aid" element={<FirstAid />} />
+        <Route path="/hospitals" element={<Hospitals />} />
+      </Routes>
       <Footer />
     </>
   );
 }
+
+export default App;
