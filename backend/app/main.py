@@ -1,9 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes import symptoms_checker
+
+# ✅ IMPORT MUST MATCH FILE NAME EXACTLY
+from app.routes.symptoms_checker import router as symptom_router
 
 app = FastAPI()
 
+# ✅ CORS MUST BE BEFORE include_router
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -15,4 +18,5 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(symptoms_checker.router)
+# ✅ THIS LINE WAS MISSING (VERY IMPORTANT)
+app.include_router(symptom_router)
