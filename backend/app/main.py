@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 # import routers explicitly
 from app.routes.symptoms_checker import router as symptom_router
 from app.routes.hospitals import router as hospitals_router
+from app.routes.first_aid import router as first_aid_router
 
 app = FastAPI()
 
@@ -22,3 +23,5 @@ app.add_middleware(
 # REGISTER ROUTES (THIS WAS MISSING)
 app.include_router(symptom_router)
 app.include_router(hospitals_router)
+app.include_router(first_aid_router)
+
