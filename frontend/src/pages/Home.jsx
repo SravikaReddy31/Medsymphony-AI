@@ -37,8 +37,7 @@ export default function Home() {
           <div className="hero-content">
             <h1 className="hero-title">MedSymphony</h1>
             <p className="hero-subtitle">
-              AI-powered voice health assistant for everyone — even without
-              reading or typing
+              AI-powered voice health assistant for everyone — even without reading or typing
             </p>
 
             <button
@@ -91,8 +90,6 @@ export default function Home() {
           <div className="trust-item">🔒 No Login Needed</div>
         </section>
       </div>
-
-      <Footer />
     </>
   );
 }

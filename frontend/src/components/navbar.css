@@ -1,59 +1,77 @@
+/* ===== NAVBAR BASE ===== */
 .navbar {
   background: #111;
-  color: #fff;
-  padding: 14px 20px;
+  padding: 14px 24px;
 }
 
-.navbar-top {
+.navbar-container {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: auto;
 }
 
+/* LOGO */
 .navbar-logo {
+  color: #fff;
   font-size: 22px;
-  font-weight: bold;
+  font-weight: 700;
+  white-space: nowrap;
 }
 
+/* LINKS */
 .navbar-links {
   display: flex;
-  gap: 25px;
+  gap: 22px;
 }
 
 .navbar-links a {
-  color: white;
+  color: #fff;
   text-decoration: none;
-  font-weight: 500;
+  font-size: 16px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  transition: background 0.3s;
+  white-space: nowrap;
 }
 
-/* Hamburger */
-.hamburger {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  cursor: pointer;
+.navbar-links a.active {
+  background: #1e88e5;
 }
 
-.hamburger span {
-  width: 25px;
-  height: 3px;
-  background: white;
+.navbar-links a:hover {
+  background: rgba(255, 255, 255, 0.15);
 }
 
-/* 🔹 Mobile */
+/* ===== MOBILE NAVBAR FIX ===== */
 @media (max-width: 768px) {
-  .hamburger {
-    display: flex;
+  .navbar-container {
+    flex-direction: column;
+    align-items: center;
   }
 
   .navbar-links {
-    display: none;
-    flex-direction: column;
-    margin-top: 15px;
-    gap: 15px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;              /* ❌ NO WRAPPING */
+    overflow-x: auto;               /* ✅ allow scroll if needed */
+    gap: 16px;
+    width: 100%;
+    justify-content: center;
+    padding: 8px 0;
   }
 
-  .navbar-links.active {
-    display: flex;
+  .navbar-links a {
+    font-size: 14px;
+    padding: 6px 10px;
+    white-space: nowrap;            /* ✅ keep text in one line */
+    flex-shrink: 0;                 /* ✅ prevent squeezing */
+  }
+
+  /* hide scrollbar (clean look) */
+  .navbar-links::-webkit-scrollbar {
+    display: none;
   }
 }
+

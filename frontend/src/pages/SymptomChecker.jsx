@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import api from "../services/api";
 import "../styles/symptoms.css";
 
 export default function Symptoms() {
@@ -7,9 +8,10 @@ export default function Symptoms() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // 🎤 Voice Input
   const startVoiceInput = (lang) => {
     if (!window.webkitSpeechRecognition) {
-      alert("Use Chrome or Edge for voice input");
+      alert("Voice input works only in Chrome / Edge");
       return;
     }
 
@@ -22,31 +24,45 @@ export default function Symptoms() {
     };
   };
 
+  // 🧠 Analyze Symptoms (REAL AI)
   const analyzeSymptoms = async () => {
-    if (!symptoms.trim()) {
-      setError("Please enter symptoms");
-      return;
-    }
+  console.log("Analyze button clicked");
 
-    setLoading(true);
-    setError("");
-    setResult(null);
+  if (!symptoms.trim()) {
+    setError("Please enter symptoms");
+    return;
+  }
 
+  setLoading(true);
+  setError("");
+  setResult(null);
+
+  try {
+    // 🔵 FIRST TRY
+    const res = await api.post("/api/analyze", {
+      text: symptoms,
+    });
+    setResult(res.data);
+  } catch (err) {
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/analyze", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: symptoms }),
-      });
+      // 🟡 WAIT 3 SECONDS + RETRY ONCE
+      await new Promise((resolve) => setTimeout(resolve, 3000));
 
-      const data = await res.json();
-      setResult(data);
-    } catch {
-      setError("Unable to analyze symptoms");
-    } finally {
-      setLoading(false);
+      const retryRes = await api.post("/api/analyze", {
+        text: symptoms,
+      });
+      setResult(retryRes.data);
+    } catch (finalErr) {
+      // 🔴 ONLY IF BOTH FAIL
+      setError(
+        finalErr.response?.data?.detail ||
+          "AI is starting. Please try again in a few seconds."
+      );
     }
-  };
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="symptom-page">
@@ -56,19 +72,25 @@ export default function Symptoms() {
           Speak or type your symptoms in your own language
         </p>
 
-        {/* VOICE BUTTONS */}
+        {/* 🎤 Voice Buttons */}
         <div className="voice-row">
-          <button className="voice-btn" onClick={() => startVoiceInput("te-IN")}>
+          <button
+            className="voice-btn"
+            onClick={() => startVoiceInput("te-IN")}
+          >
             🎤 Telugu
           </button>
-          <button className="voice-btn" onClick={() => startVoiceInput("en-US")}>
+          <button
+            className="voice-btn"
+            onClick={() => startVoiceInput("en-US")}
+          >
             🎤 English
           </button>
         </div>
 
         <p className="or-text">OR</p>
 
-        {/* TEXTAREA */}
+        {/* ✍️ Text Input */}
         <textarea
           className="symptom-input"
           placeholder="e.g. headache, fever, knee pain..."
@@ -76,7 +98,7 @@ export default function Symptoms() {
           onChange={(e) => setSymptoms(e.target.value)}
         />
 
-        {/* ANALYZE BUTTON */}
+        {/* 🔍 Analyze Button */}
         <button
           className="analyze-btn"
           onClick={analyzeSymptoms}
@@ -87,7 +109,7 @@ export default function Symptoms() {
 
         {error && <p className="error-text">{error}</p>}
 
-        {/* RESULT */}
+        {/* 📊 Result */}
         {result && (
           <div className="result-card">
             <h3>Possible Condition</h3>
@@ -95,22 +117,22 @@ export default function Symptoms() {
 
             <h4>Food Advice</h4>
             <ul>
-              {result.food_advice.map((i, k) => (
-                <li key={k}>{i}</li>
+              {result.food_advice.map((item, index) => (
+                <li key={index}>{item}</li>
               ))}
             </ul>
 
             <h4>Exercise Advice</h4>
             <ul>
-              {result.exercise_advice.map((i, k) => (
-                <li key={k}>{i}</li>
+              {result.exercise_advice.map((item, index) => (
+                <li key={index}>{item}</li>
               ))}
             </ul>
 
             <h4>Pain Relief</h4>
             <ul>
-              {result.pain_relief.map((i, k) => (
-                <li key={k}>{i}</li>
+              {result.pain_relief.map((item, index) => (
+                <li key={index}>{item}</li>
               ))}
             </ul>
 

@@ -1,8 +1,10 @@
 import api from "./api";
 
-export const checkSymptom = async (text) => {
-  const response = await api.post("/api/analyze", {
-    text: text,
-  });
+export const analyzeSymptoms = async (text) => {
+  const response = await api.post(
+    "/analyze",
+    { text },
+    { timeout: 45000 } // ⏳ 45 seconds
+  );
   return response.data;
 };

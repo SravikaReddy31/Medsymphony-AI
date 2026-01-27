@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import VoiceInput from "../components/VoiceInput";
-import { getFirstAidGuidance } from "../services/firstAidService";
+import { getFirstAidGuidance } from "../services/FirstAidService";
 
 const FirstAid = () => {
   const [spokenText, setSpokenText] = useState("");
@@ -15,10 +15,10 @@ const FirstAid = () => {
     try {
       const response = await getFirstAidGuidance(text);
 
-      // ✅ FIX: read only the result string
-      setResult(response.data.result);
+      // ✅ FIX: use response.result (NOT data)
+      setResult(response.result);
     } catch (error) {
-      console.error(error);
+      console.error("First aid error:", error);
       setResult("Unable to get first aid guidance.");
     } finally {
       setLoading(false);

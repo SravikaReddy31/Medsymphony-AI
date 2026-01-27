@@ -7,17 +7,7 @@ const Navbar = () => {
 
   return (
     <nav className="navbar">
-      <div className="navbar-top">
         <div className="navbar-logo">MedSymphony</div>
-
-        {/* Hamburger */}
-        <div className="hamburger" onClick={() => setOpen(!open)}>
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-      </div>
-
       <div className={`navbar-links ${open ? "active" : ""}`}>
         <NavLink to="/" onClick={() => setOpen(false)}>Home</NavLink>
         <NavLink to="/symptoms" onClick={() => setOpen(false)}>Symptoms</NavLink>
