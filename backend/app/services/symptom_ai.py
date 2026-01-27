@@ -1,5 +1,5 @@
 import json
-from openai import OpenAI
+from openai import OpenAI, OpenAIError
 from app.config import settings
 
 client = OpenAI(api_key=settings.OPENAI_API_KEY)
@@ -40,34 +40,20 @@ FORMAT (must be exactly this):
         }
     ]
 
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=messages,
-        temperature=0.2,
-        timeout=30
-    )
-
-    content = response.choices[0].message.content.strip()
-
     try:
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=messages,
+            temperature=0.2,
+            timeout=30
+        )
+
+        content = response.choices[0].message.content.strip()
         return json.loads(content)
 
+    except OpenAIError:
+        # Honest failure
+        raise Exception("AI is temporarily unavailable. Please try again.")
+
     except Exception:
-        # Fallback (language-agnostic safe response)
-        return {
-            "urgency": "Normal",
-            "possible_condition": "General health issue",
-            "food_advice": [
-                "Drink warm water",
-                "Eat light food"
-            ],
-            "exercise_advice": [
-                "Take rest",
-                "Avoid heavy exercise"
-            ],
-            "pain_relief": [
-                "Warm compress",
-                "Adequate sleep"
-            ],
-            "disclaimer": "This is not a medical diagnosis. Please consult a doctor."
-        }
+        raise Exception("Unable to process symptoms right now. Please retry.")
