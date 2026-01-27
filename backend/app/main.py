@@ -22,3 +22,8 @@ app.add_middleware(
 app.include_router(symptoms_router)
 app.include_router(first_aid_router)
 app.include_router(hospitals_router)
+
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
