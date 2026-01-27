@@ -1,13 +1,14 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes.symptoms_checker import router as symptom_router
+
+from app.routes.symptoms_checker import router as symptoms_router
 from app.routes.first_aid import router as first_aid_router
-from app.routes.hospitals import router as hospital_router
+from app.routes.hospitals import router as hospitals_router
 
 app = FastAPI()
 
-# ✅ HEALTH CHECK (THIS FIXES UPTIMEROBOT)
-@app.get("/health")
+# ✅ MUST BE SIMPLE GET — NO DEPENDENCIES
+@app.get("/health", include_in_schema=False)
 def health():
     return {"status": "ok"}
 
@@ -23,7 +24,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ✅ ROUTERS
-app.include_router(symptom_router)
+# ✅ ROUTES
+app.include_router(symptoms_router)
 app.include_router(first_aid_router)
-app.include_router(hospital_router)
+app.include_router(hospitals_router)
