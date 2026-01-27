@@ -43,7 +43,8 @@ FORMAT (must be exactly this):
     response = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=messages,
-        temperature=0.2
+        temperature=0.2,
+        timeout=30
     )
 
     content = response.choices[0].message.content.strip()
